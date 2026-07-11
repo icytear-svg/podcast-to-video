@@ -143,7 +143,26 @@ def split_text_by_width(text: str, font: ImageFont.FreeTypeFont, max_width: int)
             current = candidate
     if current.strip():
         chunks.append(current.strip())
-    return [chunk for chunk in chunks if chunk]
+    chunks = [chunk for chunk in chunks if chunk]
+
+    # Greedy wrapping can leave a one-character flash at the end of a cue.
+    # Move trailing characters forward until neighboring chunks are balanced,
+    # while preserving the hard pixel-width limit for every subtitle line.
+    for _ in range(len(chunks)):
+        changed = False
+        for index in range(len(chunks) - 1, 0, -1):
+            left, right = chunks[index - 1], chunks[index]
+            while len(left) > len(right) + 1:
+                candidate_left = left[:-1].strip()
+                candidate_right = (left[-1] + right).strip()
+                if not candidate_left or text_size(draw, candidate_right, font)[0] > max_width:
+                    break
+                left, right = candidate_left, candidate_right
+                changed = True
+            chunks[index - 1], chunks[index] = left, right
+        if not changed:
+            break
+    return chunks
 
 
 def title_lines(ctx: Context, style: dict) -> list[str]:
