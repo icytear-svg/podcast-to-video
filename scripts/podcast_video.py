@@ -157,6 +157,29 @@ def parse_kv(items: list[str]) -> dict[str, str]:
     return out
 
 
+def parse_corrections(value: object) -> dict[str, str]:
+    """Accept both documented KEY=VALUE lists and JSON object mappings."""
+    if value is None:
+        return {}
+    if isinstance(value, dict):
+        return {str(key): str(replacement) for key, replacement in value.items()}
+    if isinstance(value, list) and all(isinstance(item, str) for item in value):
+        return parse_kv(value)
+    raise ValueError("corrections must be an object or a list of KEY=VALUE strings")
+
+
+def bounded_segment(audio_length: float, mode: str, start: float | None, duration: float | None) -> tuple[float, float]:
+    segment_start = max(0.0, start or 0.0)
+    remaining = audio_length - segment_start
+    if remaining <= 0:
+        raise ValueError("start/duration is outside the audio")
+    requested = duration if duration is not None else (remaining if mode == "full" else 75.0)
+    segment_duration = min(requested, remaining)
+    if segment_duration <= 0:
+        raise ValueError("duration must be greater than zero")
+    return segment_start, segment_duration
+
+
 def audio_duration(audio: Path) -> float:
     result = subprocess.run(
         [
@@ -236,8 +259,7 @@ def make_config(args: argparse.Namespace) -> BuildConfig:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     stem = args.stem or re.sub(r"[^0-9A-Za-z_-]+", "_", audio.stem).strip("_") or "podcast_video"
-    duration = args.duration if args.duration is not None else (audio_duration(audio) if args.mode == "full" else 75)
-    start = args.start if args.start is not None else (0 if args.mode == "full" else 0)
+    start, duration = bounded_segment(audio_duration(audio), args.mode, args.start, args.duration)
     segment_label = meta_value(args, metadata, "segment-label")
     if not segment_label:
         segment_label = f"完整版 {duration_label(duration)}" if args.mode == "full" else f"样片 {duration_label(duration)}"
@@ -253,7 +275,8 @@ def make_config(args: argparse.Namespace) -> BuildConfig:
         published_at=meta_value(args, metadata, "published-at", ""),
         segment_label=segment_label,
     )
-    corrections = parse_kv(list(metadata.get("corrections", [])) + args.correction)
+    corrections = parse_corrections(metadata.get("corrections"))
+    corrections.update(parse_kv(args.correction))
     banned = DEFAULT_BANNED_FRAGMENTS + list(metadata.get("banned_fragments", [])) + args.banned_fragment
     layouts = args.layout or ["vertical", "horizontal"]
 
@@ -642,6 +665,8 @@ def make_screenshot(video_path: Path, at_seconds: int, work_dir: Path) -> Path:
         ["ffmpeg", "-y", "-hide_banner", "-ss", str(at_seconds), "-i", str(video_path), "-frames:v", "1", "-update", "1", str(shot)],
         check=True,
     )
+    if not shot.is_file() or shot.stat().st_size == 0:
+        raise RuntimeError(f"FFmpeg did not create screenshot at {at_seconds}s: {shot}")
     return shot
 
 

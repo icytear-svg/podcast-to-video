@@ -91,6 +91,21 @@ def merge_cli_list(cli_values: list[str] | None, metadata_value: object) -> list
     return []
 
 
+def parse_corrections(value: object) -> dict[str, str]:
+    """Accept a JSON object or the documented list of KEY=VALUE strings."""
+    if value is None:
+        return {}
+    if isinstance(value, dict):
+        return {str(key): str(replacement) for key, replacement in value.items()}
+    if isinstance(value, list) and all(isinstance(item, str) for item in value):
+        corrections: dict[str, str] = {}
+        for item in value:
+            wrong, right = parse_pair(item)
+            corrections[wrong] = right
+        return corrections
+    raise ValueError("corrections must be an object or a list of KEY=VALUE strings")
+
+
 def load_metadata(path: Path | None) -> dict:
     if path is None:
         return {}
@@ -464,7 +479,7 @@ def build_context(args: argparse.Namespace, layouts: list[str]) -> Context:
             if not path.exists():
                 raise FileNotFoundError(path)
             backgrounds[layout] = path
-    corrections = dict(metadata.get("corrections", {})) if isinstance(metadata.get("corrections"), dict) else {}
+    corrections = parse_corrections(metadata.get("corrections"))
     for wrong, right in args.correction:
         corrections[wrong] = right
     banned = list(dict.fromkeys(DEFAULT_BANNED + merge_cli_list(args.banned_fragment, metadata.get("banned_fragments"))))
