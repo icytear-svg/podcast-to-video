@@ -19,7 +19,7 @@
 - **Python 3.10+**（代码使用了 `list[str]`、`str | Path` 等新式类型标注）。
 - **Pillow（PIL）**：用于绘制封面页与文字排版。
   ```bash
-  pip install pillow
+  pip install -r requirements.txt
   ```
 - **FFmpeg / ffprobe**：需已安装并加入系统 `PATH`，用于合成视频、生成波形、截图与探测参数。
 - **中文字体**：Windows 的微软雅黑（msyh）、Noto Sans CJK 或 macOS 的 PingFang。缺失时中文会显示为方块。
