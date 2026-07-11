@@ -1,4 +1,4 @@
 interface:
   display_name: "Podcast to Video"
-  short_description: "Turn podcast episodes into platform-ready videos"
-  default_prompt: "Use $podcast-to-video to convert this podcast episode into vertical and horizontal videos with synced Chinese subtitles."
+  short_description: "Create styled podcast videos with synced subtitles"
+  default_prompt: "Use $podcast-to-video to create horizontal and vertical podcast videos with synced Chinese subtitles, using loop-background style when clips are provided."

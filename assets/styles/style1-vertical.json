@@ -1,0 +1,20 @@
+{
+  "style_id": "style1-vertical",
+  "canvas": {"width": 1080, "height": 1920, "fps": 24},
+  "colors": {
+    "text": [48, 35, 27],
+    "muted": [91, 67, 50],
+    "chip_fill": [255, 250, 240, 238],
+    "outline": [104, 72, 48, 78]
+  },
+  "background": {"warm_veil": [255, 244, 226, 26], "vignette": [42, 28, 18], "top_alpha": 88, "bottom_start": 1260, "bottom_alpha": 110},
+  "main_card": {"x1": 64, "y1": 96, "x2": 1016, "y2": 1320, "radius": 40, "fill": [255, 248, 236, 226], "outline": [104, 72, 48, 78], "shadow": {"alpha": 58, "blur": 22, "offset": [0, 16]}},
+  "podcast_name": {"x": 116, "y": 148, "font_size": 58},
+  "episode_mark": {"x": 116, "y": 214, "font_size": 26, "template": "PODCAST EP.{episode_no}"},
+  "cover": {"x": 260, "y": 315, "width": 560, "height": 560, "radius": 40, "shadow": {"alpha": 88, "blur": 22, "offset": [0, 16]}},
+  "title": {"x": 116, "y": 922, "font_size": 52, "line_gap": 12, "line_count": 2, "max_width": 848},
+  "people_chips": {"x": 116, "y": 1082, "max_width": 848, "gap": 16, "row_gap": 16, "pad_x": 26, "pad_y": 13, "font_size": 29},
+  "keyword_chips": {"x": 116, "y": 1160, "max_width": 848, "gap": 14, "row_gap": 12, "pad_x": 26, "pad_y": 13, "font_size": 27},
+  "subtitle_box": {"x1": 72, "y1": 1428, "x2": 1008, "y2": 1590, "radius": 28, "fill": [255, 248, 236, 238], "outline": [104, 72, 48, 78], "shadow": {"alpha": 62, "blur": 16, "offset": [0, 10]}},
+  "subtitles": {"center": [540, 1509], "font_size": 64, "font_weight": "bold", "max_width": 855}
+}

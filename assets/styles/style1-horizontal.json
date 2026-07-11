@@ -1,0 +1,19 @@
+{
+  "style_id": "style1-horizontal",
+  "canvas": {"width": 1920, "height": 1080, "fps": 24},
+  "colors": {
+    "text": [43, 31, 25],
+    "muted": [91, 67, 50],
+    "chip_fill": [255, 250, 240, 238],
+    "outline": [105, 74, 48, 84]
+  },
+  "background": {"saturation": 0.98, "contrast": 0.94, "brightness": -0.03},
+  "podcast_name": {"x": 118, "y": 78, "font_size": 55},
+  "episode_mark": {"x": 118, "y": 172, "font_size": 25, "template": "PODCAST  EP.{episode_no}"},
+  "title": {"x": 116, "y": 252, "font_size": 70, "line_gap": 14, "line_count": 2, "max_width": 1068},
+  "people_chips": {"x": 116, "y": 490, "gap": 16, "height": 58, "radius": 29, "label_font_size": 24, "value_font_size": 34},
+  "keyword_chips": {"x": 116, "y": 568, "max_width": 920, "gap": 15, "row_gap": 12, "pad_x": 27, "pad_y": 11, "font_size": 27},
+  "cover": {"x": 1256, "y": 78, "width": 542, "height": 542, "radius": 38},
+  "subtitle_box": {"x1": 116, "y1": 760, "x2": 1804, "y2": 966, "radius": 24, "fill": [255, 245, 226, 226], "outline": [105, 74, 48, 84]},
+  "subtitles": {"center": [960, 862], "font_size": 64, "font_weight": "regular", "max_width": 1568}
+}

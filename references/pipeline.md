@@ -8,24 +8,35 @@ Minimum inputs:
 - Cover/logo image: preferably square, at least 1000px wide.
 - Metadata: podcast name, episode title, guest, host, recording date, publish date, episode tag.
 - Transcript: SRT preferred. If missing, generate with ASR.
+- Optional looping background videos: 16:9 for horizontal and 9:16 for vertical.
 
 Optional metadata JSON:
 
 ```json
 {
   "podcast_name": "苦中找乐",
+  "episode_no": "093",
   "title": "上职高的孩子什么样？在职高当老师有啥体验？",
+  "title_lines": ["上职高的孩子什么样？", "在职高当老师有啥体验？"],
   "episode_tag": "对谈 夜夜页页小马 - 093",
   "guest": "小马（夜夜页页主播）",
   "host": "羊行",
   "recorded_at": "2026年5月11日",
   "published_at": "2026年6月29日",
+  "keywords": ["职业教育", "职高老师", "青少年"],
+  "horizontal_bg_video": "C:/media/loop-horizontal.mp4",
+  "vertical_bg_video": "C:/media/loop-vertical.mp4",
   "corrections": ["杨航=羊行", "博客=播客"],
   "banned_fragments": ["YoYo Television Series"]
 }
 ```
 
 CLI values override JSON values.
+
+## Visual Style Selection
+
+- Use `loop_background_video.py` for style1 or supplied loop clips. It renders at 24 fps with large one-line subtitles and no waveform/progress bar. See `loop-background-style.md`.
+- Use `podcast_video.py` for the classic blurred-cover treatment with waveform, progress bar, dates, and segment metadata.
 
 ## ASR Strategy
 
@@ -68,10 +79,14 @@ Before delivery:
 rg -n "YoYo|优优|Exclusive|<wrong-name>" "<work-dir>\*.ass"
 ```
 
+- For style1, also confirm ASS contains no `\\N` and every subtitle fits as one line.
+
 - Compare duration to the original audio when rendering full episodes.
 - If uploading to platforms, spot-check the first 60 seconds, a middle section, and the ending after upload processing.
 
 ## Common Commands
+
+For loop-background style commands and metadata, see `loop-background-style.md`.
 
 Generate a 75-second sample from `02:25`:
 
